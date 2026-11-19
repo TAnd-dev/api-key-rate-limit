@@ -1,6 +1,6 @@
 {
   "name": "api-key-rate-limit",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Rate limiting per API key for Node and edge runtimes: sliding window and token bucket, in-memory and Redis stores, Express/Fastify/Fetch adapters.",
   "keywords": [
     "rate-limit",
