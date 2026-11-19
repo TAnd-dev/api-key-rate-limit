@@ -26,7 +26,10 @@ export function createKeyHasher(option: HashKeysOption = true): KeyHasher {
     return async (key) => toBase64Url(await subtle.digest('SHA-256', encoder.encode(key)));
   }
 
-  const secret = typeof option.secret === 'string' ? encoder.encode(option.secret) : option.secret;
+  // A copy: Web Crypto needs an ArrayBuffer-backed view (not a
+  // SharedArrayBuffer), and the caller changing their buffer later must not
+  // change the key.
+  const secret = typeof option.secret === 'string' ? encoder.encode(option.secret) : new Uint8Array(option.secret);
   if (secret.byteLength === 0) throw new RangeError('hashKeys.secret must not be empty');
   // Imported once, lazily: importKey is async and the constructor is not.
   let cryptoKey: ReturnType<typeof subtle.importKey> | undefined;

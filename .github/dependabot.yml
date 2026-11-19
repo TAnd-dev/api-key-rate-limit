@@ -6,10 +6,26 @@ updates:
     directory: /
     schedule:
       interval: weekly
+
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: weekly
     groups:
+      # Minor and patch updates of dev tooling together, in one PR. Major
+      # updates get a PR each: they can break the build and need a look.
       dev-dependencies:
         dependency-type: development
+        update-types: [minor, patch]
+    ignore:
+      # The package supports Node 20+, so its own code must not start using
+      # types from newer Node versions. Raise together with `engines`.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
+      # The tests run against the Redis client versions the README names
+      # (ioredis 5, node-redis 4). Moving to a new major is a deliberate
+      # change: test it, then update the README.
+      - dependency-name: ioredis
+        update-types: ['version-update:semver-major']
+      - dependency-name: redis
+        update-types: ['version-update:semver-major']

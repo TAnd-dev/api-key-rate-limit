@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createHash, createHmac } from 'node:crypto';
-import { createLimiter, MemoryStore, type ConsumeRequest, type LimiterOptions, type Store } from '../src/index.js';
+import { createKeyHasher, createLimiter, MemoryStore, type ConsumeRequest, type LimiterOptions, type Store } from '../src/index.js';
 
 function setup(limit = 5) {
   let now = 0;
@@ -40,6 +40,14 @@ describe('createLimiter', () => {
       'akl:sliding-window:2000:k',
       'akl:token-bucket:1000:k',
     ]);
+  });
+
+  it('copies a binary HMAC secret, so changing the buffer later does not change the hashes', async () => {
+    const secret = new TextEncoder().encode('pepper');
+    const hash = createKeyHasher({ secret });
+    // Before the first call: the key is imported lazily, on first use.
+    secret.fill(0);
+    expect(await hash('sk_live_abc')).toBe(createHmac('sha256', 'pepper').update('sk_live_abc').digest('base64url'));
   });
 
   it('hashes keys by default: SHA-256, HMAC with a secret, or a custom function', async () => {
