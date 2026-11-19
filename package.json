@@ -1,0 +1,163 @@
+{
+  "name": "api-key-rate-limit",
+  "version": "0.0.0",
+  "description": "Rate limiting per API key for Node and edge runtimes: sliding window and token bucket, in-memory and Redis stores, Express/Fastify/Fetch adapters.",
+  "keywords": [
+    "rate-limit",
+    "rate-limiter",
+    "api-key",
+    "throttle",
+    "redis",
+    "express",
+    "fastify",
+    "hono",
+    "token-bucket",
+    "sliding-window"
+  ],
+  "homepage": "https://github.com/TAnd-dev/api-key-rate-limit#readme",
+  "bugs": {
+    "url": "https://github.com/TAnd-dev/api-key-rate-limit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TAnd-dev/api-key-rate-limit.git"
+  },
+  "license": "MIT",
+  "author": "Andrei",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "redis": [
+        "./dist/redis.d.ts"
+      ],
+      "express": [
+        "./dist/express.d.ts"
+      ],
+      "fastify": [
+        "./dist/fastify.d.ts"
+      ],
+      "fetch": [
+        "./dist/fetch.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./redis": {
+      "import": {
+        "types": "./dist/redis.d.ts",
+        "default": "./dist/redis.js"
+      },
+      "require": {
+        "types": "./dist/redis.d.cts",
+        "default": "./dist/redis.cjs"
+      }
+    },
+    "./express": {
+      "import": {
+        "types": "./dist/express.d.ts",
+        "default": "./dist/express.js"
+      },
+      "require": {
+        "types": "./dist/express.d.cts",
+        "default": "./dist/express.cjs"
+      }
+    },
+    "./fastify": {
+      "import": {
+        "types": "./dist/fastify.d.ts",
+        "default": "./dist/fastify.js"
+      },
+      "require": {
+        "types": "./dist/fastify.d.cts",
+        "default": "./dist/fastify.cjs"
+      }
+    },
+    "./fetch": {
+      "import": {
+        "types": "./dist/fetch.d.ts",
+        "default": "./dist/fetch.js"
+      },
+      "require": {
+        "types": "./dist/fetch.d.cts",
+        "default": "./dist/fetch.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepack": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:redis": "REDIS_URL=${REDIS_URL:-redis://127.0.0.1:6390} vitest run",
+    "redis:up": "docker run -d --rm --name akl-redis -p 127.0.0.1:6390:6379 redis:7-alpine",
+    "redis:down": "docker stop akl-redis",
+    "check:pkg": "publint --strict && attw --pack .",
+    "ci": "npm run typecheck && npm run lint && npm test && npm run build && npm run smoke && npm run check:pkg",
+    "changeset": "changeset",
+    "release": "changeset publish",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "peerDependencies": {
+    "ioredis": ">=5",
+    "redis": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "ioredis": {
+      "optional": true
+    },
+    "redis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@changesets/cli": "^3.0.3",
+    "@eslint/js": "^9.39.5",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.5",
+    "eslint": "^9.39.5",
+    "express": "^5.3.0",
+    "fastify": "^5.12.8",
+    "globals": "^17.14.0",
+    "hono": "^4.13.19",
+    "ioredis": "^5.11.1",
+    "publint": "^0.3.25",
+    "redis": "^4.7.1",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.73.0",
+    "vitest": "^5.1.1"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
+  }
+}

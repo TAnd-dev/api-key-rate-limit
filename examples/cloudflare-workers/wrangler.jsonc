@@ -1,0 +1,14 @@
+{
+  "name": "api-key-rate-limit-example",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  // RedisStore imports node:crypto (for script SHA-1s).
+  "compatibility_flags": ["nodejs_compat"],
+  "kv_namespaces": [
+    // API keys: key -> {"plan":"free"|"pro"}. Create with
+    // `npx wrangler kv namespace create API_KEYS` and put its id here.
+    { "binding": "API_KEYS", "id": "00000000000000000000000000000000" }
+  ]
+  // Secrets: `npx wrangler secret put UPSTASH_REDIS_REST_URL` (and _TOKEN);
+  // KEY_HASH_SECRET likewise. Locally, put them in .dev.vars.
+}
