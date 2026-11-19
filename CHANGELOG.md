@@ -1,5 +1,11 @@
 # api-key-rate-limit
 
+## 0.1.1
+
+### Patch Changes
+
+- fe52444: `hashKeys: { secret }` with a `Uint8Array` now copies the secret: changing the buffer afterwards no longer changes the hashes. Also compiles with `@types/node` 26.
+
 ## 0.1.0
 
 ### Minor Changes
